@@ -21,6 +21,8 @@ public class Server {
 	 * The host object clients can connect with
 	 */
 	private Host host;
+	
+	private Game game;
 
 	private final InetSocketAddress address = new InetSocketAddress(
 			"localhost", 5757);
@@ -41,6 +43,7 @@ public class Server {
 
 	public Server() {
 		try {
+			this.game = new Game();
 			this.host = new Host(address, peerCount, channelCount, incomingBandwithLimit, outgoingBandwithLimit);
 			System.out.println("Connected to " + address.getHostString());
 		} catch (EnetException e) {
@@ -61,6 +64,7 @@ public class Server {
 	
 				if (event.type() == Event.Type.Connect) {
 					System.out.println("Client connected: " + event.peer().address().getHostString());
+					game.addNewPlayer(event.peer().toString(), "Player"); 
 				}
 	
 				if (event.type() == Event.Type.Disconnect) {
