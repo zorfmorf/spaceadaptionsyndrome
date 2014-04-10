@@ -31,9 +31,9 @@ function love.update(dt)
         
         if event.type == "connect" then
             print("Connected to", event.peer)
-            event.peer:send("hello world")
+            event.peer:send("MESSAGE|Hello World!")
         elseif event.type == "receive" then
-            print("Got message: ", event.data, event.peer)
+            print("Got message: ", event.data, event.peer, "---\n")
         else
             print("Something happened at least")
         end
@@ -41,7 +41,7 @@ function love.update(dt)
     end
     
     if timer > 3 and not sent then
-        server:send("Heyjo mother*ucker")
+        server:send("MESSAGE|Heyjo motherfucker")
         sent = true
     end
     

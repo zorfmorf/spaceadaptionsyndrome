@@ -23,7 +23,7 @@ public class Player extends Entity {
 	
 	private Thruster rotationalThruster;
 	
-	public Player(String name, String id) {
+	public Player(String id, String name) {
 		this.name = name;
 		this.id = id;
 		this.fuel = 100;
