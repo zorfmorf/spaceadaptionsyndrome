@@ -44,7 +44,8 @@ Entity = class
     xs = 0,
     ys = 0,
     o = 0,
-    r = 0 
+    r = 0,
+    damaged = false
 }
 Entity.name = "Entity"
 
@@ -59,4 +60,3 @@ Player = Entity:extends
     thrusterRotateLeft = Thruster:new(2, 0.1),
     thrusterRotateRight = Thruster:new(2, 0.1),
 }
-Player.name = "Player"

@@ -1,5 +1,6 @@
 
 local thrust = nil
+local song = nil
 
 function audioHandler_init()
     
@@ -10,11 +11,14 @@ function audioHandler_init()
     thrust[4] = love.audio.newSource("res/thrust4.wav")
     thrust[5] = love.audio.newSource("res/thrust5.wav")
     
+    song = love.audio.newSource("res/bu-shapes-of-feet.it")
+    song:setLooping(true)
+    song:play()
+    
 end
 
 function audioHandler_update(dt)
     
-
 end
 
 

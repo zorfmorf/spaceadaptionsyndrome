@@ -40,7 +40,7 @@ function love.load(arg)
     
     input:push(love.graphics:getWidth())
     input:push(love.graphics:getHeight())
-    input:push(1)
+    input:push(math.random(1, 100000))
     
     thread = love.thread.newThread('misc/nebulator.lua')
     thread:start()
@@ -98,6 +98,7 @@ function love.mousereleased( x, y, button )
 end
 
 function love.keypressed( key, isrepeat )
+    if key == "escape" then love.event.quit() end
     inputHandler_keypressed( key, isrepeat )
 end
 

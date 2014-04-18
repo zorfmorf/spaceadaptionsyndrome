@@ -17,7 +17,6 @@ function loadScreen_update(dt)
     end
     if t ~= nil then
         loadvalue = t
-        print(t)
     end
 end
 
