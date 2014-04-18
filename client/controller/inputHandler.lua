@@ -19,13 +19,13 @@ end
 
 function inputHandler_mousepressed( x, y, button )
     if button == "l" then
-        oldMousePos = {x, y}
+       -- oldMousePos = {x, y}
     end
 end
 
 function inputHandler_mousereleased( x, y, button )
     if button == "l" then
-        oldMousePos = nil
+        --oldMousePos = nil
     end
 end
 

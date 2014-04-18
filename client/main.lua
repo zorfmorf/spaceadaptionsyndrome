@@ -29,7 +29,19 @@ function love.load(arg)
     -- game
     gameHandler_init()
     
-    stateHandler_ready() -- for testing purposes
+    --stateHandler_ready() -- for testing purposes
+    
+    -- temporary thread channels
+    output = love.thread.getChannel("nebulator_output")
+    percentage = love.thread.getChannel("nebulator_percentage")
+    input = love.thread.getChannel("nebulator_input")
+    
+    input:push(love.graphics:getWidth())
+    input:push(love.graphics:getHeight())
+    input:push(1)
+    
+    thread = love.thread.newThread('misc/nebulator.lua')
+    thread:start()
     
 end
 
@@ -41,7 +53,13 @@ function love.update(dt)
     
     if state == "connecting" or state == "connected" then
         loadScreen_update(dt)
-        netHandler_service()
+        --netHandler_service()
+        
+        local tmp = output:pop()
+        if tmp ~= nil then
+            background = love.graphics.newImage(tmp)
+            stateHandler_ready()
+        end
     end
     
     if state == "ingame" then
