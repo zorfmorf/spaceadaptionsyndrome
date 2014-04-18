@@ -7,6 +7,7 @@ require "view/loadScreen"
 require "model/ressourceLoader"
 require "model/entity"
 
+require "controller/audioHandler"
 require "controller/gameHandler"
 require "controller/inputHandler"
 require "controller/netHandler"
@@ -25,6 +26,7 @@ function love.load(arg)
     
     -- load all ressources
     load_Images()
+    audioHandler_init()
     
     -- game
     gameHandler_init()

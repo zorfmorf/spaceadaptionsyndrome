@@ -82,11 +82,11 @@ function gameScreen_draw()
     end
     
     if player.thrusterRotateLeft.active then
-        love.graphics.draw(imgThrust, player.x, player.y, player.o, 1, 1, -16, -8)
+        love.graphics.draw(imgThrust, player.x, player.y, player.o + math.pi / 3, 1, 1, -16, 0)
     end
     
     if player.thrusterRotateRight.active then
-        love.graphics.draw(imgThrust, player.x, player.y, player.o, 1, 1, 24, -8)
+        love.graphics.draw(imgThrust, player.x, player.y, player.o - math.pi / 3, 1, 1, 24, 0)
     end
     
     if player.x < -50 or player.x > love.graphics:getWidth() + 50 or player.y < 50 or player.y > love.graphics:getHeight() + 50 then
@@ -100,7 +100,7 @@ function gameScreen_draw()
     
     love.graphics.origin()
     love.graphics.setFont(font)
-    love.graphics.setColor(200, 100, 100, 150)
+    love.graphics.setColor(200, 100, 100, 190)
     local string = "See you at ludum dare"
     love.graphics.print(string, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 1, 1, font:getWidth(string) / 2, font:getHeight())
     

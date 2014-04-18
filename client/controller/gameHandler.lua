@@ -3,9 +3,11 @@ entities = {}
 
 function gameHandler_init()
     player = Player:new()
-    player.xs = 5
-    player.ys = 10
-    player.r = 0.1
+    player.x = 300
+    player.y = 100
+    player.xs = 1
+    player.ys = 2
+    player.r = 0.05
     table.insert(entities, player)
 end
 
@@ -48,7 +50,18 @@ function gameHandler_update(dt)
                 entity.xs = entity.xs + entity.thrusterRight.power * dt * math.sin(entity.o + math.pi / 2)
                 entity.ys = entity.ys - entity.thrusterRight.power * dt * math.cos(entity.o + math.pi / 2)
             end
-                      
+            
+            entity.thrusterRotateLeft:update(dt)
+            entity.thrusterRotateRight:update(dt)
+            entity.thrusterFront:update(dt)
+            entity.thrusterBack:update(dt)
+            entity.thrusterLeft:update(dt)
+            entity.thrusterRight:update(dt)
+            
+            if love.keyboard.isDown( KEY_FORWARD) and entity.thrusterBack.ready then
+                --entity.thrusterBack:activate()
+            end
+
         end
        
     end
