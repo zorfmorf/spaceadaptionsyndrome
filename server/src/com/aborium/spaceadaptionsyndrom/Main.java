@@ -9,8 +9,7 @@ public class Main {
 		// init all the shit
 		Server server = Server.getReference();
 		Game game = Game.getReference();
-		game.setServer(); //to avoid cyclic dependencies
-		
+		game.setServer(); //to avoid cyclic dependencies	
 		
 		float dt = 0;
 		double before = 0;

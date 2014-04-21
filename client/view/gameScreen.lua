@@ -68,27 +68,27 @@ function gameScreen_draw()
     
     for i,cand in pairs(entities) do
         
-        if cand.thrusterBack.active then
+        if cand.thruster["back"].active then
             love.graphics.draw(imgThrust, cand.x, cand.y, cand.o, 1, 1, 4, -8)
         end
         
-        if cand.thrusterFront.active then
+        if cand.thruster["front"].active then
             love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi, 1, 1, 4, -8)
         end
         
-        if cand.thrusterLeft.active then
+        if cand.thruster["right"].active then
             love.graphics.draw(imgThrust, cand.x, cand.y, cand.o - math.pi / 2, 1, 1, 4, -8)
         end
         
-        if cand.thrusterRight.active then
+        if cand.thruster["left"].active then
             love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi / 2, 1, 1, 4, -8)
         end
         
-        if cand.thrusterRotateLeft.active then
+        if cand.thruster["rotateLeft"].active then
             love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi / 3, 1, 1, -16, 0)
         end
         
-        if cand.thrusterRotateRight.active then
+        if cand.thruster["rotateRight"].active then
             love.graphics.draw(imgThrust, cand.x, cand.y, cand.o - math.pi / 3, 1, 1, 24, 0)
         end
         

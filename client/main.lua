@@ -20,7 +20,7 @@ function love.load(arg)
     
     timer = 0
     stateHandler_init()
-    --netHandler_connect()
+    netHandler_connect()
     loadScreen_init()
     gameScreen_init()
     
@@ -55,7 +55,7 @@ function love.update(dt)
     
     if state == "connecting" or state == "connected" then
         loadScreen_update(dt)
-        --netHandler_service()
+        netHandler_service()
         
         local tmp = output:pop()
         if tmp ~= nil then

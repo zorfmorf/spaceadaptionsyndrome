@@ -45,66 +45,48 @@ function gameHandler_update(dt)
         --handle thrusters
         if getmetatable(entity) == Player then
             
-            if entity.thrusterRotateLeft.active then
-                entity.r = entity.r - entity.thrusterRotateLeft.power * dt
-            end
-           
-            if entity.thrusterRotateRight.active then
-                entity.r = entity.r + entity.thrusterRotateRight.power * dt
-            end
-            
-            if entity.thrusterFront.active then
-                entity.xs = entity.xs + entity.thrusterFront.power * dt * math.sin(entity.o - math.pi)
-                entity.ys = entity.ys - entity.thrusterFront.power * dt * math.cos(entity.o  - math.pi)
-            end
-            
-            if entity.thrusterBack.active then
-                entity.xs = entity.xs + entity.thrusterBack.power * dt * math.sin(entity.o)
-                entity.ys = entity.ys - entity.thrusterBack.power * dt * math.cos(entity.o)
-            end
-            
-            if entity.thrusterLeft.active then
-                entity.xs = entity.xs + entity.thrusterLeft.power * dt * math.sin(entity.o - math.pi / 2)
-                entity.ys = entity.ys - entity.thrusterLeft.power * dt * math.cos(entity.o - math.pi / 2)
+            for i,thruster in pairs(entity.thruster) do
+                
+                if thruster.active then
+                    
+                    if thruster.rotation == 0 then
+                        entity.xs = entity.xs + thruster.power * dt * math.sin(entity.o + thruster.angle)
+                        entity.ys = entity.ys - thruster.power * dt * math.cos(entity.o + thruster.angle)
+                    else
+                        entity.r = entity.r + thruster.power * dt * thruster.rotation
+                    end
+                    
+                end
+                
+                thruster:update(dt)
+                
             end
             
-            if entity.thrusterRight.active then
-                entity.xs = entity.xs + entity.thrusterRight.power * dt * math.sin(entity.o + math.pi / 2)
-                entity.ys = entity.ys - entity.thrusterRight.power * dt * math.cos(entity.o + math.pi / 2)
-            end
-            
-            entity.thrusterRotateLeft:update(dt)
-            entity.thrusterRotateRight:update(dt)
-            entity.thrusterFront:update(dt)
-            entity.thrusterBack:update(dt)
-            entity.thrusterLeft:update(dt)
-            entity.thrusterRight:update(dt)
-            
-            
+            -- if it is actual player
             if entity.name == "real" then
             
-                if love.keyboard.isDown( KEY_FORWARD) and entity.thrusterBack.ready then
-                    entity.thrusterBack:activate()
+                if love.keyboard.isDown( KEY_FORWARD) and entity.thruster["back"].ready then
+                    entity.thruster["back"]:activate()
                 end
                 
-                if love.keyboard.isDown( KEY_BACK) and entity.thrusterFront.ready then
-                    entity.thrusterFront:activate()
+                if love.keyboard.isDown( KEY_BACK) and entity.thruster["front"].ready then
+                    entity.thruster["front"]:activate()
                 end
                 
-                if love.keyboard.isDown( KEY_RIGHT) and entity.thrusterRight.ready then
-                    entity.thrusterRight:activate()
+                if love.keyboard.isDown( KEY_RIGHT) and entity.thruster["left"].ready then
+                    entity.thruster["left"]:activate()
                 end
                 
-                if love.keyboard.isDown( KEY_LEFT) and entity.thrusterLeft.ready then
-                    entity.thrusterLeft:activate()
+                if love.keyboard.isDown( KEY_LEFT) and entity.thruster["right"].ready then
+                    entity.thruster["right"]:activate()
                 end
                 
-                if love.keyboard.isDown( KEY_LEFT_ROTATE) and entity.thrusterRotateLeft.ready then
-                    entity.thrusterRotateLeft:activate()
+                if love.keyboard.isDown( KEY_LEFT_ROTATE) and entity.thruster["rotateRight"].ready then
+                    entity.thruster["rotateRight"]:activate()
                 end
                 
-                if love.keyboard.isDown( KEY_RIGHT_ROTATE) and entity.thrusterRotateRight.ready then
-                    entity.thrusterRotateRight:activate()
+                if love.keyboard.isDown( KEY_RIGHT_ROTATE) and entity.thruster["rotateLeft"].ready then
+                    entity.thruster["rotateLeft"]:activate()
                 end
             else
                 
@@ -114,27 +96,28 @@ function gameHandler_update(dt)
                     -- this one is ai controlled
                     if entity.cd == nil or entity.cd <= 0 then
                        
-                       entity.cd = 1
-                       
-                       local tmp = math.random(1, 6)
-                       
-                       if tmp == 1 then entity.thrusterBack:activate() end
-                       if tmp == 2 then entity.thrusterFront:activate() end
-                       if tmp == 3 then entity.thrusterRight:activate() end
-                       if tmp == 4 then entity.thrusterLeft:activate() end
-                       if tmp == 5 then entity.thrusterRotateLeft:activate() end
-                       if tmp == 6 then entity.thrusterRotateRight:activate() end
+                        entity.cd = 1
+
+                        local tmp = math.random(1, 6)
+                        
+                        local index, thruster = nil
+                        
+                        for k=1,tmp do
+                            index, thruster = next(entity.thruster)
+                        end
+
+                        if thruster ~= nil then thruster:activate() end
                         
                     else
                        entity.cd = entity.cd - dt 
                     end
                         
                     if entity.r < -math.pi / 8 then
-                        entity.thrusterRotateRight:activate()
+                        entity.thruster["rotateRight"]:activate()
                     end
                     
                     if entity.r > math.pi / 8 then
-                        entity.thrusterRotateLeft:activate()
+                        entity.thruster["rotateLeft"]:activate()
                     end
                 
                 end

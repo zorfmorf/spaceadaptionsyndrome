@@ -3,8 +3,8 @@ KEY_FORWARD = "w"
 KEY_BACK = "s"
 KEY_LEFT = "q"
 KEY_RIGHT = "e"
-KEY_LEFT_ROTATE = "a"
-KEY_RIGHT_ROTATE = "d"
+KEY_LEFT_ROTATE = "d"
+KEY_RIGHT_ROTATE = "a"
 
 local oldMousePos = nil
 
@@ -37,46 +37,26 @@ function inputHandler_mousereleased( x, y, button )
 end
 
 function inputHandler_keypressed( key, isrepeat )
-    if key == KEY_BACK and player.thrusterFront.ready then
-       player.thrusterFront:activate()
+    if key == KEY_BACK and player.thruster["front"].ready then
+       player.thruster["front"]:activate()
     end
-    if key == KEY_LEFT and player.thrusterLeft.ready then
-       player.thrusterLeft:activate()
+    if key == KEY_LEFT and player.thruster["right"].ready then
+       player.thruster["right"]:activate()
     end
-    if key == KEY_RIGHT and player.thrusterRight.ready then
-       player.thrusterRight:activate()
+    if key == KEY_RIGHT and player.thruster["left"].ready then
+       player.thruster["left"]:activate()
     end
-    if key == KEY_FORWARD and player.thrusterBack.ready then
-       player.thrusterBack:activate()
+    if key == KEY_FORWARD and player.thruster["back"].ready then
+       player.thruster["back"]:activate()
     end
-    if key == KEY_LEFT_ROTATE and player.thrusterRotateLeft.ready then
-       player.thrusterRotateLeft:activate()
+    if key == KEY_LEFT_ROTATE and player.thruster["rotateRight"].ready then
+       player.thruster["rotateRight"]:activate()
     end
-    if key == KEY_RIGHT_ROTATE and player.thrusterRotateRight.ready then
-       player.thrusterRotateRight:activate()
+    if key == KEY_RIGHT_ROTATE and player.thruster["rotateLeft"].ready then
+       player.thruster["rotateLeft"]:activate()
     end
 end
 
 function inputHandler_keyreleased( key )
-    --[[
-    if key == "s" then
-       player.thrusterFront.active = false
-       audioHandler_stopThrust()
-    end
-    if key == "q" then
-       player.thrusterLeft.active = false
-    end
-    if key == "e" then
-       player.thrusterRight.active = false
-    end
-    if key == "w" then
-       player.thrusterBack.active = false
-    end
-    if key == "a" then
-       player.thrusterRotateLeft.active = false
-    end
-    if key == "d" then
-       player.thrusterRotateRight.active = false
-    end
-    ]]--
+    
 end
