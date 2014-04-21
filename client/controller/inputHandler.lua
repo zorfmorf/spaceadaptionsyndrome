@@ -55,6 +55,10 @@ function inputHandler_keypressed( key, isrepeat )
     if key == KEY_RIGHT_ROTATE and player.thruster["rotateLeft"].ready then
        player.thruster["rotateLeft"]:activate()
     end
+    
+    if key == " " then
+        player.weapon:fire()
+    end
 end
 
 function inputHandler_keyreleased( key )

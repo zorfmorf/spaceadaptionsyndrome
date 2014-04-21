@@ -40,6 +40,50 @@ end
 Thruster.name = "Thruster"
 
 
+-- a weapon
+Weapon = class {
+    particles = nil,
+    cooldown = 0
+}
+function Weapon:__init()
+    self.particles = love.graphics.newParticleSystem(imgCloud, 4000)
+    self.particles:setColors(0, 176, 255, 100, 146, 255, 0, 155)
+    self.particles:setEmissionRate(10000)
+    self.particles:setEmitterLifetime(0.2)
+    self.particles:setParticleLifetime(0.2, 0.2)
+    self.particles:setSizeVariation(1)
+    self.particles:setSizes(0.2, 0.4, 0.6)
+    self.particles:setSpeed(1000, 12000)
+    self.particles:setSpread(0)
+    self.particles:setSpin(-1, 1)
+    self.particles:setSpinVariation(1)
+    self.particles:setAreaSpread("none", 0, 0)
+    self.particles:pause()
+    self.particles:moveTo(player.x, player.y)
+    self.particles:setDirection(player.o - math.pi / 2)
+    
+end
+function Weapon:fire()
+    
+    if self.cooldown <= 0 then
+        self.cooldown = 0.5
+        self.particles:moveTo(player.x, player.y)
+        self.particles:setDirection(player.o - math.pi / 2)
+        self.particles:reset()
+        self.particles:start()
+    end
+    
+end
+function Weapon:update(dt)
+    self.particles:update(dt)
+    if self.cooldown > 0 then
+        self.cooldown = self.cooldown - dt
+    end
+end
+Weapon.name = "Weapon"
+
+
+
 -- everything flying around in space is an entity
 Entity = class 
 {

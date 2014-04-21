@@ -93,6 +93,11 @@ function gameScreen_draw()
         end
         
         if cand.name == "real" then
+            
+            love.graphics.setBlendMode( "additive" )
+            love.graphics.draw(player.weapon.particles, 0, 0)
+            love.graphics.setBlendMode( "alpha" )
+            
             love.graphics.draw(imgSuit, cand.x, cand.y, cand.o, 1, 1, 32, 32)
         else
             if cand.damaged then

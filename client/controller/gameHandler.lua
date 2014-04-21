@@ -9,6 +9,7 @@ function gameHandler_init()
     player.ys = 2
     player.r = 0.05
     player.name = "real"
+    player.weapon = Weapon:new()
     player.id = 7
     entities[player.id] = player
     
@@ -44,6 +45,12 @@ function gameHandler_update(dt)
        
         --handle thrusters
         if getmetatable(entity) == Player then
+            
+            if entity.weapon ~= nil then
+                
+                entity.weapon:update(dt, entity.x, entity.y, entity.o)
+                
+            end
             
             for i,thruster in pairs(entity.thruster) do
                 
@@ -129,7 +136,6 @@ function gameHandler_update(dt)
     end
     
     -- collision detection. ineffecient
-       
     for i,entity in pairs(entities) do 
         
         for j,other in pairs(entities) do 

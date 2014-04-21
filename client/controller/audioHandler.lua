@@ -13,7 +13,7 @@ function audioHandler_init()
     
     song = love.audio.newSource("res/bu-shapes-of-feet.it")
     song:setLooping(true)
-    song:play()
+    --song:play()
     
 end
 
@@ -23,5 +23,5 @@ end
 
 
 function audioHandler_playThrust()
-    thrust[math.random(1, 5)]:play()
+    --thrust[math.random(1, 5)]:play()
 end
