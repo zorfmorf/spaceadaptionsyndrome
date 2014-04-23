@@ -69,6 +69,10 @@ function love.update(dt)
         inputHandler_update(dt)
         gameScreen_update(dt) 
     end
+    
+    if state == "gameover" then
+        gameScreen_update(dt)
+    end
         
 end
 
@@ -76,7 +80,7 @@ end
 -- draw
 function love.draw()
     
-    if state == "ingame" then
+    if state == "ingame" or state == "gameover"  then
         
         gameScreen_draw()
         

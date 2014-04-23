@@ -15,3 +15,7 @@ end
 function stateHandler_ready()
     state = "ingame"
 end
+
+function stateHandler_gameOver()
+   state = "gameover" 
+end

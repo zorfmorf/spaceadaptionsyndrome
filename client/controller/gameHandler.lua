@@ -1,6 +1,11 @@
 
 entities = {}
 
+killcounter = 0
+
+timeLeft = 60 -- can never run out
+clock = 0 -- how long youve been on
+
 message = nil -- messages are displayed globally to the player
 
 --spawn in enemy from side
@@ -9,9 +14,6 @@ function gameHandler_spawnEnemy(id)
     
     spaceman.x = math.random( 1, love.graphics.getWidth() )
     spaceman.y = math.random( -100, -50 )
-
-    
-    
     spaceman.r = math.random(-math.pi / 4, math.pi / 4)
     spaceman.xs = math.random(-50, 50)
     spaceman.ys = math.random(-50, 50)
@@ -23,8 +25,8 @@ end
 -- call once on startup
 function gameHandler_init()
     player = Player:new()
-    player.x = 300
-    player.y = 100
+    player.x = love.graphics:getWidth() / 2
+    player.y = love.graphics:getHeight() * 0.7
     player.xs = 1
     player.ys = 2
     player.r = 0.05
@@ -74,10 +76,12 @@ function gameHandler_playerFireWeapon()
             end
         end
         
-        if count == 1 then message = "KILL!" end
+        if count == 1 then message = "HIT!" end
         if count == 2 then message = "DOUBLE KILL!" end
         if count >= 3 then message = "RIDICULOUS" end
-    
+        killcounter = killcounter + count
+        timeLeft = timeLeft + count * 10
+        
     end
     
 end
@@ -91,9 +95,18 @@ function gameHandler_checkDespawn(entity)
         
     end
     
+    if entity.name == "real" then
+        stateHandler_gameOver()
+    end
+    
 end
 
 function gameHandler_update(dt)
+    
+    timeLeft = timeLeft - dt
+    clock = clock + dt
+    
+    if timeLeft <= 0 then stateHandler_gameOver() end
     
     for i,entity in pairs(entities) do       
        

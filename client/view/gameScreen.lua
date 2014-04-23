@@ -6,11 +6,14 @@ local font = nil
 
 local stars = nil
 
+local opacity = 0
+
 message = nil --global message
 
 function gameScreen_init()
     font = love.graphics.newFont(100)
     fontSmall = love.graphics.newFont(20)
+    fontKill = love.graphics.newFont(40)
     
     stars = {}
     for i=1,4 do
@@ -49,6 +52,10 @@ function gameScreen_update(dt)
         
     end
     
+    if state == "gameover" then
+       opacity = math.min(255, opacity + 25 *dt) 
+    end
+    
 end
 
 
@@ -68,61 +75,75 @@ function gameScreen_draw()
     love.graphics.translate(xshift, yshift)
     love.graphics.setColor(255, 255, 255, 255)
     
-    for i,cand in pairs(entities) do
-        
-        if cand.thruster["back"].active then
-            love.graphics.draw(imgThrust, cand.x, cand.y, cand.o, 1, 1, 4, -8)
-        end
-        
-        if cand.thruster["front"].active then
-            love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi, 1, 1, 4, -8)
-        end
-        
-        if cand.thruster["right"].active then
-            love.graphics.draw(imgThrust, cand.x, cand.y, cand.o - math.pi / 2, 1, 1, 4, -8)
-        end
-        
-        if cand.thruster["left"].active then
-            love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi / 2, 1, 1, 4, -8)
-        end
-        
-        if cand.thruster["rotateLeft"].active then
-            love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi / 3, 1, 1, -16, 0)
-        end
-        
-        if cand.thruster["rotateRight"].active then
-            love.graphics.draw(imgThrust, cand.x, cand.y, cand.o - math.pi / 3, 1, 1, 24, 0)
-        end
-        
-        if cand.name == "real" then
+    if state == "ingame" then
+    
+        for i,cand in pairs(entities) do
             
-            love.graphics.setBlendMode( "additive" )
-            love.graphics.draw(player.weapon.particles, 0, 0)
-            love.graphics.setBlendMode( "alpha" )
-            
-            love.graphics.draw(imgSuit, cand.x, cand.y, cand.o, 1, 1, 32, 32)
-        else
-            if cand.damaged then
-                love.graphics.draw(imgSuitAi_dmg, cand.x, cand.y, cand.o, 1, 1, 32, 32)
-            else
-                love.graphics.draw(imgSuitAi, cand.x, cand.y, cand.o, 1, 1, 32, 32)
+            if cand.thruster["back"].active then
+                love.graphics.draw(imgThrust, cand.x, cand.y, cand.o, 1, 1, 4, -8)
             end
+            
+            if cand.thruster["front"].active then
+                love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi, 1, 1, 4, -8)
+            end
+            
+            if cand.thruster["right"].active then
+                love.graphics.draw(imgThrust, cand.x, cand.y, cand.o - math.pi / 2, 1, 1, 4, -8)
+            end
+            
+            if cand.thruster["left"].active then
+                love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi / 2, 1, 1, 4, -8)
+            end
+            
+            if cand.thruster["rotateLeft"].active then
+                love.graphics.draw(imgThrust, cand.x, cand.y, cand.o + math.pi / 3, 1, 1, -16, 0)
+            end
+            
+            if cand.thruster["rotateRight"].active then
+                love.graphics.draw(imgThrust, cand.x, cand.y, cand.o - math.pi / 3, 1, 1, 24, 0)
+            end
+            
+            if cand.name == "real" then
+                
+                love.graphics.setBlendMode( "additive" )
+                love.graphics.draw(player.weapon.particles, 0, 0)
+                love.graphics.setBlendMode( "alpha" )
+                
+                love.graphics.draw(imgSuit, cand.x, cand.y, cand.o, 1, 1, 32, 32)
+            else
+                if cand.damaged then
+                    love.graphics.draw(imgSuitAi_dmg, cand.x, cand.y, cand.o, 1, 1, 32, 32)
+                else
+                    love.graphics.draw(imgSuitAi, cand.x, cand.y, cand.o, 1, 1, 32, 32)
+                end
+            end
+            
         end
-        
     end
     
+    
     love.graphics.origin()
+    
+    if state == "gameover" then
+        love.graphics.setColor(0, 0, 0, opacity)
+        love.graphics.rectangle("fill", 0, 0, love.graphics:getWidth(), love.graphics:getHeight())
+    end
+    
     love.graphics.setFont(font)
     love.graphics.setColor(200, 100, 100, 190)
-    local string = "See you at ludum dare"
+    local string = math.floor(timeLeft * 10) * 0.1 --"Stay on the screen!"
     
     if message ~= nil then string = message end
+    if state == "gameover" then string = "Game Over: "..math.floor(clock) end
     
     love.graphics.print(string, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 1, 1, font:getWidth(string) / 2, font:getHeight())
     
+    love.graphics.setFont(fontKill)
+    love.graphics.print(killcounter .. " kills", love.graphics.getWidth() - 200, 10)
+    
     love.graphics.setFont(fontSmall)
     love.graphics.setColor(255, 255, 255, 255)
-    love.graphics.print(love.timer.getFPS(), love.graphics.getWidth() - 60, 10)
+    --love.graphics.print(love.timer.getFPS(), love.graphics.getWidth() - 60, 10)
     
 end
 
