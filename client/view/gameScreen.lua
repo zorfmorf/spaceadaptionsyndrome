@@ -6,6 +6,8 @@ local font = nil
 
 local stars = nil
 
+message = nil --global message
+
 function gameScreen_init()
     font = love.graphics.newFont(100)
     fontSmall = love.graphics.newFont(20)
@@ -113,6 +115,9 @@ function gameScreen_draw()
     love.graphics.setFont(font)
     love.graphics.setColor(200, 100, 100, 190)
     local string = "See you at ludum dare"
+    
+    if message ~= nil then string = message end
+    
     love.graphics.print(string, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 1, 1, font:getWidth(string) / 2, font:getHeight())
     
     love.graphics.setFont(fontSmall)

@@ -57,7 +57,7 @@ function inputHandler_keypressed( key, isrepeat )
     end
     
     if key == " " then
-        player.weapon:fire()
+        gameHandler_playerFireWeapon()
     end
 end
 

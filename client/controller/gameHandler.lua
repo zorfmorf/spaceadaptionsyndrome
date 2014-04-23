@@ -1,6 +1,26 @@
 
 entities = {}
 
+message = nil -- messages are displayed globally to the player
+
+--spawn in enemy from side
+function gameHandler_spawnEnemy(id)
+    local spaceman = Player:new()
+    
+    spaceman.x = math.random( 1, love.graphics.getWidth() )
+    spaceman.y = math.random( -100, -50 )
+
+    
+    
+    spaceman.r = math.random(-math.pi / 4, math.pi / 4)
+    spaceman.xs = math.random(-50, 50)
+    spaceman.ys = math.random(-50, 50)
+    spaceman.name = "ai"
+    spaceman.id = id
+    entities[spaceman.id] = spaceman 
+end
+
+-- call once on startup
 function gameHandler_init()
     player = Player:new()
     player.x = 300
@@ -14,16 +34,63 @@ function gameHandler_init()
     entities[player.id] = player
     
     for i = 1,6 do
-        local spaceman = Player:new()
-        spaceman.x = math.random( 1, love.graphics.getWidth() )
-        spaceman.y = math.random( 1, love.graphics.getHeight() )
-        spaceman.r = math.random(-math.pi / 4, math.pi / 4)
-        spaceman.xs = math.random(-50, 50)
-        spaceman.ys = math.random(-50, 50)
-        spaceman.name = "ai"
-        spaceman.id = i
-        entities[spaceman.id] = spaceman
+        gameHandler_spawnEnemy(i)
     end
+end
+
+function gameHandler_playerFireWeapon()
+    
+    if player.weapon:fire() then
+        
+        audioHandler_playLazer()
+    
+        -- collision detection.
+        -- Not sooo inefficient as we only use it once per shot. so should be okay even for large enemy amounts
+        
+        local count = 0
+        
+        for i,cand in pairs(entities) do
+            
+            if cand.name == "ai" then
+                -- first calculate angle to target
+                local angle = player.o - (math.atan2(cand.y - player.y, cand.x - player.x) + math.pi / 2)
+                
+                --calc distance between player and target
+                local dist = math.sqrt( math.pow(player.x - cand.x, 2) + math.pow(player.y - cand.y, 2) )
+                
+                --one angle is 90° anyway so the last has to be wait we are using radian!!
+                local angle2 = math.pi / 2 - angle
+                
+                -- using law of sines we can find out the distance between circle and collision point
+                local lengthDC = math.sin(angle) * dist
+                
+                if math.abs(lengthDC) <= 40 and not cand.damaged then
+
+                    cand.damaged = true
+                    count = count + 1
+                    
+                end
+                
+            end
+        end
+        
+        if count == 1 then message = "KILL!" end
+        if count == 2 then message = "DOUBLE KILL!" end
+        if count >= 3 then message = "RIDICULOUS" end
+    
+    end
+    
+end
+
+function gameHandler_checkDespawn(entity)
+    
+    if entity.name == "ai" and entity.damaged then
+        
+        entities[entity.id] = nil
+        gameHandler_spawnEnemy(entity.id)
+        
+    end
+    
 end
 
 function gameHandler_update(dt)
@@ -38,10 +105,11 @@ function gameHandler_update(dt)
         if entity.o > math.pi * 2 then entity.o = entity.o - math.pi * 2 end
         if entity.o < -math.pi * 2 then entity.o = entity.o + math.pi * 2 end
         
-        if entity.x > love.graphics.getWidth() + 100 then entity.x = -100 end
-        if entity.x < -100  then entity.x = love.graphics.getWidth() + 100 end
-        if entity.y > love.graphics.getHeight() + 100 then entity.y = -100 end
-        if entity.y < -100 then entity.y = love.graphics.getHeight() + 100 end
+        --adjust position if out of screen (come in on the other side)
+        if entity.x > love.graphics.getWidth() + 100 then entity.x = -100 gameHandler_checkDespawn(entity) end
+        if entity.x < -100  then entity.x = love.graphics.getWidth() + 100 gameHandler_checkDespawn(entity) end
+        if entity.y > love.graphics.getHeight() + 100 then entity.y = -100 gameHandler_checkDespawn(entity) end
+        if entity.y < -100 then entity.y = love.graphics.getHeight() + 100 gameHandler_checkDespawn(entity) end
        
         --handle thrusters
         if getmetatable(entity) == Player then
@@ -133,27 +201,6 @@ function gameHandler_update(dt)
 
         end
        
-    end
-    
-    -- collision detection. ineffecient
-    for i,entity in pairs(entities) do 
-        
-        for j,other in pairs(entities) do 
-            
-            if i ~= j and math.abs(entity.x - other.x) < 55 and math.abs(entity.y - other.y) < 55 then
-                
-                if other.name == "ai" then
-                    other.damaged = true
-                end
-                
-                if entity.name == "ai" then
-                    entity.damaged = true
-                end
-            
-            end
-            
-        end
-        
     end
     
 end

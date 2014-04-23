@@ -66,18 +66,23 @@ end
 function Weapon:fire()
     
     if self.cooldown <= 0 then
-        self.cooldown = 0.5
+        self.cooldown = 0.8
         self.particles:moveTo(player.x, player.y)
         self.particles:setDirection(player.o - math.pi / 2)
         self.particles:reset()
         self.particles:start()
+        return true
     end
+    
+    return false
     
 end
 function Weapon:update(dt)
     self.particles:update(dt)
     if self.cooldown > 0 then
         self.cooldown = self.cooldown - dt
+    else
+       message = nil 
     end
 end
 Weapon.name = "Weapon"
