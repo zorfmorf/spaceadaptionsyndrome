@@ -13,7 +13,6 @@ message = nil --global message
 function gameScreen_init()
     font = love.graphics.newFont(100)
     fontSmall = love.graphics.newFont(20)
-    fontKill = love.graphics.newFont(40)
     
     stars = {}
     for i=1,4 do
@@ -131,15 +130,12 @@ function gameScreen_draw()
     
     love.graphics.setFont(font)
     love.graphics.setColor(200, 100, 100, 190)
-    local string = math.floor(timeLeft * 10) * 0.1 --"Stay on the screen!"
+    local string = "We need some kind of gameplay"
     
     if message ~= nil then string = message end
-    if state == "gameover" then string = "Game Over: "..math.floor(clock) end
+    if state == "gameover" then string = "Game Over" end
     
     love.graphics.print(string, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, 1, 1, font:getWidth(string) / 2, font:getHeight())
-    
-    love.graphics.setFont(fontKill)
-    love.graphics.print(killcounter .. " kills", love.graphics.getWidth() - 200, 10)
     
     love.graphics.setFont(fontSmall)
     love.graphics.setColor(255, 255, 255, 255)

@@ -3,9 +3,6 @@ entities = {}
 
 killcounter = 0
 
-timeLeft = 60 -- can never run out
-clock = 0 -- how long youve been on
-
 message = nil -- messages are displayed globally to the player
 
 --spawn in enemy from side
@@ -79,8 +76,6 @@ function gameHandler_playerFireWeapon()
         if count == 1 then message = "HIT!" end
         if count == 2 then message = "DOUBLE KILL!" end
         if count >= 3 then message = "RIDICULOUS" end
-        killcounter = killcounter + count
-        timeLeft = timeLeft + count * 10
         
     end
     
@@ -102,11 +97,6 @@ function gameHandler_checkDespawn(entity)
 end
 
 function gameHandler_update(dt)
-    
-    timeLeft = timeLeft - dt
-    clock = clock + dt
-    
-    if timeLeft <= 0 then stateHandler_gameOver() end
     
     for i,entity in pairs(entities) do       
        
